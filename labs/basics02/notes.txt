@@ -1,0 +1,70 @@
+1. CREATE
+
+POST /notes
+Body JSON:
+
+{ "text": "mi primera nota" }
+
+Debe:
+
+Validar que text exista y no esté vacío (trim).
+
+Crear note con id incremental (1,2,3…)
+
+createdAt como Date.now()
+
+Responder 201 con la nota creada.
+
+Errores:
+
+Si no hay text → 400 { error: "text is required" }
+
+
+
+2. READ ALL (con query params)
+
+GET /notes
+Query params opcionales:
+
+q = filtra por texto (contiene, case-insensitive)
+
+limit = devuelve máximo N
+
+Ejemplos:
+
+/notes → todas
+
+/notes?q=hola → solo las que tengan “hola”
+
+/notes?limit=5
+
+/notes?q=hola&limit=2
+
+Responde 200 con array.
+
+
+3. READ ONE
+
+GET /notes/:id
+
+Si existe: 200 note
+
+Si no: 404 { error: "note not found" }
+
+
+4. UPDATE (patch)
+
+PUT /notes/:id
+Body:
+
+{ "text": "texto actualizado" }
+
+Debe:
+
+Validar text
+
+Si existe: reemplaza el text (y si quieres, agrega updatedAt: Date.now())
+
+Responde 200 con la note actualizada
+
+Si no existe: 404      

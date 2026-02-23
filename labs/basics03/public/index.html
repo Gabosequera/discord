@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Socket Test</h1>
+
+    <ul id="messages"></ul>
+
+    <form id="chat-form">
+        <input type="text" id="message-input">
+        <button type="button" id="button">Enviar</button>
+
+        <button type="button" id="buttonTodos">Enviar a todo</button>
+    </form>
+
+    <script>
+        const messages = document.getElementById("messages");
+
+        function addMessage(text) {
+            const li = document.createElement("li");
+            li.textContent = text;
+            messages.appendChild(li);
+        };
+
+        addMessage("hola");
+        addMessage("amiguitos");
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+
+        const  socket = io();
+        console.log("Connected with id: ", socket.id);
+
+        document.getElementById("button").addEventListener("click", () => {
+
+            // socket.emit("saludo", "Hola servidor");
+
+            socket.emit("ping");
+            socket.on("pong", (msg) => {
+                addMessage(msg);
+                console.log(msg);
+            });
+        });
+
+        document.getElementById("buttonTodos").addEventListener("click", () => {
+            //emit (emite al backend)
+            socket.emit("messaje", "Hola a todos"); 
+
+            //on (recibe del backend)
+            socket.on("nuevoMensaje", (msg) => {
+                addMessage(msg);
+            });
+        });
+
+        // Emit solo a el usuario "ping"
+
+    </script>
+
+</body>
+</html>

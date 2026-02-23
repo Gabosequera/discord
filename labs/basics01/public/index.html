@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini App</title>
+</head>
+<body>
+    <h1>Mi Messaging App</h1>
+
+    <p id="output"></p>
+    <p id="json"></p>
+    <pre id="preOutput"></pre>
+    
+    <input id="text" type="text">            
+    <button id="send" onclick="querry()">Enviar querry</button>
+
+    <!--List all users button-->
+    <input type="button" id="listUsers">
+
+    <input type="checkbox" id="check">
+
+    <!--Este es el input para filtrar el JSON-->
+    <input id="jsonText" type="text">
+
+    <script>
+
+        fetch("/product/gaming/123")
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+        });
+
+        //Si click en "listUsers" -> imprime el JSON en un pre
+        document.getElementById("listUsers").addEventListener("click", () => {
+            fetch("/userslist/allUsers")
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("preOutput").textContent =
+                    JSON.stringify(data, null, 2);
+                });
+        });
+
+        //Obtengo el valor de jsonText en (e), y hago algo si cambia ("change"). Guarlo lo que escribio el usuario, y luego lo uso para filtrar el json y pedirselo al backend
+        document.getElementById("jsonText").addEventListener("change", (e) => {
+            const value = e.target.value.trim();
+
+            fetch("/api")
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("output").innerText = data[value]; 
+                });
+        });
+
+        //Anade un adeventlistener a el check cuando detecta cambio. Si el estado es checked, pone "5-metros", si no, lo deja en "todos"
+        document.getElementById("check").addEventListener("change", (e) => {
+            const q = e.target.checked ? "5-metros" : ""; 
+            fetch(`/search?q=${encodeURIComponent(q)}`)
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("output").innerText = data;
+            });
+        });
+
+        //Esta funcion se dispara cuando precionas el button. Llama al .get que usar querry params y devuelve el valor de input al backend
+        function querry() {
+            const text = document.getElementById("text");
+            const q = text.value.trim();
+            if (!q) return;
+
+            fetch(`/search?q=${encodeURIComponent(q)}`)
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("output").innerText = data;
+            });
+        };
+    </script>
+</body>
+</html>
