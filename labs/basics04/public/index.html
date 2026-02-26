@@ -19,7 +19,10 @@
     <script>
         const messages = document.getElementById("messages");
         
-        
+        function addHistory(history) {
+
+        };
+
         function inputElementValue() {
             const input = document.getElementById("message-input")
             return input.value;
@@ -43,17 +46,22 @@
             addMessage(`${message} ${id}`);
         });
 
-        //Active listener on anh pubic message
+        socket.on("chat:history", (history) => {
+
+        });
+
+        //Active listener on any public message => prints on screen with addMessage()
         socket.on("chat:newPublic", (msg) => {
-            addMessage(msg);
             console.log(msg);
+            addMessage(`${msg.at(-1).text}`);
         });
 
         document.getElementById("buttonEveryone").addEventListener("click", () => {
-            socket.emit("chat:send",  inputElementValue()); 
+            // socket.emit("chat:send",  inputElementValue()); 
+            socket.emit("chat:send", {
+                text: inputElementValue()
+            }); 
         });
-        
-        
 
     </script>
 
