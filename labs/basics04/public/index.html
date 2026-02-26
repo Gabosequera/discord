@@ -19,7 +19,13 @@
     <script>
         const messages = document.getElementById("messages");
         
-        
+        //For each element in history (messages), adds a message with the content.txt
+        function addHistory(history) {
+            history.forEach(message => {
+               addMessage(message.text);
+            });
+        };
+
         function inputElementValue() {
             const input = document.getElementById("message-input")
             return input.value;
@@ -43,17 +49,23 @@
             addMessage(`${message} ${id}`);
         });
 
-        //Active listener on anh pubic message
+        //Waits for the server to send teh history, and calls addHistory()
+        socket.on("chat:history", (history) => {
+            addHistory(history);
+        });
+
+        //Active listener on any public message => prints on screen with addMessage()
         socket.on("chat:newPublic", (msg) => {
-            addMessage(msg);
             console.log(msg);
+            addMessage(`${msg.at(-1).text}`);
         });
 
         document.getElementById("buttonEveryone").addEventListener("click", () => {
-            socket.emit("chat:send",  inputElementValue()); 
+            // socket.emit("chat:send",  inputElementValue()); 
+            socket.emit("chat:send", {
+                text: inputElementValue()
+            }); 
         });
-        
-        
 
     </script>
 
