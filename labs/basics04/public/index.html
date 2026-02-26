@@ -19,8 +19,11 @@
     <script>
         const messages = document.getElementById("messages");
         
+        //For each element in history (messages), adds a message with the content.txt
         function addHistory(history) {
-
+            history.forEach(message => {
+               addMessage(message.text);
+            });
         };
 
         function inputElementValue() {
@@ -46,8 +49,9 @@
             addMessage(`${message} ${id}`);
         });
 
+        //Waits for the server to send teh history, and calls addHistory()
         socket.on("chat:history", (history) => {
-
+            addHistory(history);
         });
 
         //Active listener on any public message => prints on screen with addMessage()
