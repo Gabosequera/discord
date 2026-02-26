@@ -37,6 +37,12 @@ io.on("connection", (socket) => { //Se crea la coneccion io.on
         io.emit("nuevoMensaje", msg);
     });
 
+    //Envia objeto
+    socket.on("objeto", (objeto) => {
+        console.log(objeto.nombre);
+        console.log(objeto.apellido);
+    });
+
 
     //Al desconectarse, lo imprime
     socket.on("disconnect", () => {
