@@ -28,6 +28,8 @@ io.on("connection", (socket) => { //Se crea la coneccion io.on
         id: socket.id
     });
     
+
+
     //Envia el historial del chat
     socket.emit("chat:history", messages);
 
@@ -41,7 +43,6 @@ io.on("connection", (socket) => { //Se crea la coneccion io.on
         saveMessage(socket.id, msg);
         io.emit("chat:newPublic", messages);
     });
-
 
 
 
